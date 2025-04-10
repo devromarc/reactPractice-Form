@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Input from "./Input";
 
 export default function StateLogin() {
   const [userCred, setuserCred] = useState({ email: "", password: "" });
@@ -39,32 +40,25 @@ export default function StateLogin() {
       <h2>Login</h2>
 
       <div className="control-row">
-        <div className="control no-margin">
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            onBlur={() => handleOnBlur("email")}
-            type="email"
-            name="email"
-            value={userCred.email}
-            onChange={handleOnchange}
-          />
+        <Input
+          label="Email"
+          id="email"
+          type="email"
+          name="email"
+          onBlur={() => handleOnBlur("email")}
+          value={userCred.email}
+          onChange={handleOnchange}
+        />
 
-          <div className="control-error">
-            {emailIsValidBLur && <p>Please enter a valid email address.</p>}
-          </div>
-        </div>
-
-        <div className="control no-margin">
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            name="password"
-            value={userCred.password}
-            onChange={handleOnchange}
-          />
-        </div>
+        <Input
+          label="Password"
+          id="password"
+          type="password"
+          name="password"
+          onBlur={() => handleOnBlur("password")}
+          value={userCred.password}
+          onChange={handleOnchange}
+        />
       </div>
 
       <p className="form-actions">

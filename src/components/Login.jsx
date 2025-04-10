@@ -17,6 +17,7 @@ export default function Login() {
       return;
     }
 
+    setemailIsInvalid(false);
     console.log("proceed.........");
   }
 
