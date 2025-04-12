@@ -1,9 +1,11 @@
 export function isEmail(value) {
-  return value.includes('@');
+  // A common regular expression for email validation (can be made more strict)
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(value);
 }
 
 export function isNotEmpty(value) {
-  return value.trim() !== '';
+  return value.trim() !== "";
 }
 
 export function hasMinLength(value, minLength) {

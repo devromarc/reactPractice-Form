@@ -1,40 +1,38 @@
-import { useState } from "react";
 import Input from "./Input";
+import { isEmail, isNotEmpty, hasMinLength } from "../util/validation";
+import { useInput } from "./hooks/useInput";
 
 export default function StateLogin() {
-  const [userCred, setuserCred] = useState({ email: "", password: "" });
-  const [didBlur, setdidBlur] = useState({
-    email: false,
-    password: false,
+  const {
+    enteredValue: emailEnteredValue,
+    handleOnBlur: handleEmailOnBlur,
+    handleOnchange: handleEmailOnChange,
+    hasError: emailHasError,
+  } = useInput("", (value) => {
+    return isEmail(value) && isNotEmpty(value);
   });
 
-  // this validation is too early
-  // TF condition to check whether it doesnt have @ symbol in the email and the user starts typing
-  const emailIsValid = userCred.email !== "" && !userCred.email.includes("@");
-  // using blur
-  const emailIsValidBLur = didBlur.email && !userCred.email.includes("@");
+  const {
+    enteredValue: passwordEnteredValue,
+    handleOnchange: handlePasswordOnChange,
+    handleOnBlur: handlePasswordOnBlur,
+    hasError: passwordHasError,
+  } = useInput("", (value) => {
+    return hasMinLength(value, 6);
+  });
 
   function handleSubmit(event) {
     event.preventDefault();
 
-    console.log(userCred);
+    if (passwordHasError || emailHasError) {
+      return;
+    }
+
+    console.log(
+      `Email: ${emailEnteredValue} Password: ${passwordEnteredValue}`
+    );
   }
 
-  function handleOnchange(event) {
-    const { name, value } = event.target;
-
-    setuserCred((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-    setdidBlur((prevState) => ({ ...prevState, [name]: false }));
-  }
-
-  function handleOnBlur(identifier) {
-    setdidBlur((prevState) => ({ ...prevState, [identifier]: true }));
-  }
-
-  console.log(userCred);
   return (
     <form onSubmit={handleSubmit}>
       <h2>Login</h2>
@@ -45,9 +43,10 @@ export default function StateLogin() {
           id="email"
           type="email"
           name="email"
-          onBlur={() => handleOnBlur("email")}
-          value={userCred.email}
-          onChange={handleOnchange}
+          onBlur={handleEmailOnBlur}
+          value={emailEnteredValue}
+          onChange={handleEmailOnChange}
+          error={emailHasError && "Please enter a valid email address."}
         />
 
         <Input
@@ -55,9 +54,13 @@ export default function StateLogin() {
           id="password"
           type="password"
           name="password"
-          onBlur={() => handleOnBlur("password")}
-          value={userCred.password}
-          onChange={handleOnchange}
+          onBlur={handlePasswordOnBlur}
+          value={passwordEnteredValue}
+          onChange={handlePasswordOnChange}
+          error={
+            passwordHasError &&
+            "Please enter a passsword that is greater than 6 character"
+          }
         />
       </div>
 
